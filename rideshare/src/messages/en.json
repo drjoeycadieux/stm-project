@@ -1,0 +1,395 @@
+{
+  "meta": {
+    "title": "RideShare LLC — Rides across Montreal",
+    "description": "RideShare LLC connects riders and drivers across Montreal, from the Plateau to Trudeau Airport. Book a ride in minutes, in English or French.",
+    "pages": {
+      "ride": "Book a ride",
+      "trips": "My trips",
+      "login": "Sign in",
+      "register": "Create an account",
+      "driver": "Driver dashboard",
+      "earnings": "Driver earnings",
+      "pricing": "Pricing",
+      "safety": "Safety",
+      "how": "How it works",
+      "drive": "Drive with us"
+    }
+  },
+  "nav": {
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "safety": "Safety",
+    "drive": "Drive with us",
+    "ride": "Book a ride",
+    "trips": "My trips",
+    "driverDashboard": "Driver dashboard",
+    "earnings": "Earnings",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out",
+    "menu": "Menu"
+  },
+  "common": {
+    "loading": "Loading...",
+    "tryAgain": "Try again",
+    "close": "Close",
+    "perKm": "per km",
+    "perMin": "per minute",
+    "minFare": "minimum fare",
+    "seats": "seats",
+    "back": "Back"
+  },
+  "hero": {
+    "badge": "Montreal's local rideshare",
+    "title": "Every borough. Every hour. One tap away.",
+    "subtitle": "RideShare LLC moves Montrealers across the island — reliable cars, upfront prices in dollars, and bilingual drivers who know the city.",
+    "cta": "Book a ride",
+    "secondaryCta": "Drive with us",
+    "stats": [
+      { "value": "3,500+", "label": "local drivers" },
+      { "value": "6 min", "label": "average pickup" },
+      { "value": "4.9", "label": "rider rating" }
+    ]
+  },
+  "landing": {
+    "features": {
+      "title": "Built for Montreal",
+      "items": [
+        {
+          "title": "Upfront prices",
+          "text": "See the full fare — taxes included — before you confirm. No surprises on Sainte-Catherine."
+        },
+        {
+          "title": "Island-wide coverage",
+          "text": "From Verdun to Hochelaga, Mile End to LaSalle, and every terminal at Trudeau Airport."
+        },
+        {
+          "title": "Bilingual by default",
+          "text": "Ride in the language you're comfortable in. Nos chauffeurs parlent français et anglais."
+        },
+        {
+          "title": "Winter-ready drivers",
+          "text": "All-season tires, winter-tested cars, and drivers who know how to handle the 40 in a snowstorm."
+        }
+      ]
+    },
+    "routes": {
+      "title": "Popular routes",
+      "subtitle": "Typical fares, taxes included.",
+      "from": "to",
+      "book": "Book this route"
+    },
+    "how": {
+      "title": "How it works",
+      "steps": [
+        {
+          "title": "Set your route",
+          "text": "Pick a pickup and drop-off point from Montreal's landmarks, stations, and neighbourhoods."
+        },
+        {
+          "title": "Confirm your fare",
+          "text": "Choose RideShare, Comfort or XL, see the exact price, and confirm in one tap."
+        },
+        {
+          "title": "Ride and arrive",
+          "text": "Track your driver live, hop in, and pay automatically when you get out. Rate the trip after."
+        }
+      ]
+    },
+    "safety": {
+      "title": "Safety you can feel",
+      "text": "Every RideShare LLC driver is background-checked, insured, and rated after each trip. Share your trip status with family and friends in one tap.",
+      "cta": "Read about safety"
+    },
+    "drive": {
+      "title": "Earn on your schedule",
+      "text": "Own a car and know Montreal? Drive with RideShare LLC. Keep 78% of every fare, get paid weekly, and choose your own hours.",
+      "cta": "Become a driver"
+    }
+  },
+  "footer": {
+    "tagline": "Local rides for local lives.",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "contact": "514-555-0199",
+    "address": "7250 Rue du Mile End, Montréal, QC",
+    "rights": "© 2026 RideShare LLC. All rights reserved."
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to book rides and track your trips.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "noAccount": "New to RideShare?",
+      "register": "Create an account",
+      "invalid": "Wrong email or password."
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Riding takes about a minute to set up.",
+      "name": "Full name",
+      "phone": "Phone (optional)",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters",
+      "submit": "Create account",
+      "haveAccount": "Already riding with us?",
+      "login": "Sign in",
+      "taken": "An account with this email already exists."
+    },
+    "demo": {
+      "title": "Try the demo",
+      "text": "This site runs on demo data. Use an existing account:",
+      "rider": "Rider — Emma",
+      "driver": "Driver — Marc",
+      "fill": "Fill in"
+    },
+    "signedOut": "You have been signed out."
+  },
+  "booking": {
+    "title": "Where are you going?",
+    "subtitle": "Pick your route and see the fare upfront.",
+    "pickup": "Pickup",
+    "dropoff": "Drop-off",
+    "search": "Search Montreal places...",
+    "noResults": "No places match your search.",
+    "chooseTier": "Choose your ride",
+    "estimated": "Estimated fare",
+    "fareIncludes": "Taxes included",
+    "surgeNote": "Fares are slightly higher during rush hour (7–9 AM, 4–6 PM).",
+    "airportNote": "Trips to or from Trudeau Airport include a $12 airport fee.",
+    "confirm": "Confirm ride",
+    "needAccount": "Sign in to confirm your ride.",
+    "samePlace": "Pickup and drop-off must be different.",
+    "error": "We couldn't book that ride. Please try again.",
+    "activeExists": "You already have an active ride. Finish or cancel it first.",
+    "findingDriver": "Looking for a nearby driver...",
+    "tiers": {
+      "economy": {
+        "name": "RideShare",
+        "description": "Everyday rides, everyday prices. 4 seats."
+      },
+      "premium": {
+        "name": "Comfort",
+        "description": "Newer cars, top-rated drivers. 4 seats."
+      },
+      "xl": {
+        "name": "XL",
+        "description": "Extra room for people and gear. 6 seats."
+      }
+    }
+  },
+  "trips": {
+    "title": "My trips",
+    "active": "Active trip",
+    "past": "Past trips",
+    "empty": "No trips yet.",
+    "emptyCta": "Book your first ride",
+    "viewTrip": "View trip",
+    "newRide": "Book another ride",
+    "statuses": {
+      "requested": "Looking for a driver",
+      "matched": "Driver on the way",
+      "in_progress": "On the way",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "timeline": {
+      "requested": "Ride requested",
+      "matched": "Driver assigned",
+      "in_progress": "Trip started",
+      "completed": "Arrived"
+    },
+    "driverCard": {
+      "title": "Your driver",
+      "arriving": "Arriving at pickup",
+      "onTheWay": "Heading to destination",
+      "plate": "Plate",
+      "call": "Call driver"
+    },
+    "cancel": {
+      "button": "Cancel ride",
+      "confirm": "Cancel this ride? No fee is charged for cancellations before pickup."
+    },
+    "receipt": {
+      "title": "Receipt",
+      "trip": "Trip",
+      "distance": "Distance",
+      "duration": "Estimated time",
+      "base": "Base fare",
+      "distanceFare": "Distance",
+      "timeFare": "Time",
+      "airportFee": "Airport fee",
+      "surge": "Peak pricing",
+      "subtotal": "Subtotal",
+      "taxes": "TPS + TVQ",
+      "total": "Total",
+      "reference": "Payment reference",
+      "paid": "Paid automatically with RideShare Wallet"
+    },
+    "rating": {
+      "title": "How was your trip?",
+      "thanks": "Thanks for rating your trip!",
+      "done": "Rate trip"
+    }
+  },
+  "driver": {
+    "apply": {
+      "title": "Drive with RideShare LLC",
+      "subtitle": "Register your car and start earning this week.",
+      "carModel": "Car model",
+      "color": "Colour",
+      "plate": "Licence plate",
+      "submit": "Submit application",
+      "note": "Applications are approved instantly in this demo."
+    },
+    "dash": {
+      "title": "Driver dashboard",
+      "online": "You're online",
+      "offline": "You're offline",
+      "goOnline": "Go online",
+      "goOffline": "Go offline",
+      "activeRide": "Active ride",
+      "requests": "Nearby requests",
+      "noRequests": "No open requests right now. Stay online!",
+      "accept": "Accept",
+      "start": "Start trip",
+      "complete": "Complete trip",
+      "stats": {
+        "earnings": "Earnings today",
+        "rides": "Trips today",
+        "rating": "Your rating",
+        "onlineTime": "Online"
+      },
+      "tripStatus": {
+        "headToPickup": "Head to the pickup point, then start the trip.",
+        "tripUnderway": "Trip in progress — drop off the rider to complete it."
+      }
+    },
+    "earnings": {
+      "title": "Earnings",
+      "total": "Total earned",
+      "trips": "Trips completed",
+      "average": "Average per trip",
+      "shareNote": "You keep 78% of every fare. Payouts arrive every Monday by direct deposit.",
+      "recent": "Recent trips",
+      "noTrips": "No completed trips yet."
+    }
+  },
+  "pricing": {
+    "title": "Simple, upfront pricing",
+    "subtitle": "No surge surprises, no hidden fees. Prices in Canadian dollars.",
+    "estimator": {
+      "title": "Estimate your fare",
+      "pickup": "Pickup",
+      "dropoff": "Drop-off",
+      "estimate": "Estimated fare",
+      "tripDetails": "Trip details"
+    },
+    "table": {
+      "title": "Rates",
+      "tier": "Ride",
+      "base": "Base",
+      "perKm": "Per km",
+      "perMin": "Per minute",
+      "minFare": "Minimum",
+      "seats": "Seats"
+    },
+    "notes": {
+      "taxes": "All fares include 5% GST and 9.975% QST.",
+      "airport": "A $12 fee applies to trips starting or ending at Trudeau Airport (YUL).",
+      "rush": "A 25% peak-time adjustment applies on weekdays, 7–9 AM and 4–6 PM.",
+      "cancellation": "Cancellations are free before your driver arrives at the pickup point."
+    }
+  },
+  "safetyPage": {
+    "title": "Safety first, always",
+    "subtitle": "Getting home safely is the whole point.",
+    "items": [
+      {
+        "title": "Vetted drivers",
+        "text": "Every driver passes a background check, a driving record review, and a vehicle inspection before their first trip."
+      },
+      {
+        "title": "Live trip sharing",
+        "text": "Share your live location, driver details, and plate number with friends or family while you ride."
+      },
+      {
+        "title": "Rated after every trip",
+        "text": "Both riders and drivers rate each trip. Consistently low ratings remove drivers from the platform."
+      },
+      {
+        "title": "24/7 support",
+        "text": "Our Montreal support team answers in French and English, any hour of the night."
+      }
+    ],
+    "cta": "Book a safe ride"
+  },
+  "howPage": {
+    "title": "How RideShare works",
+    "subtitle": "From tap to destination in four steps.",
+    "steps": [
+      {
+        "title": "Open the app",
+        "text": "Tell us where you're picked up and where you're going. We know Montreal's landmarks, metros, and arenas."
+      },
+      {
+        "title": "See your price",
+        "text": "Fares are calculated from distance, time, and the ride type you choose — with taxes already included."
+      },
+      {
+        "title": "Meet your driver",
+        "text": "Watch your driver approach in real time, with the car model, colour, and plate shown up front."
+      },
+      {
+        "title": "Hop out and go",
+        "text": "Payment happens automatically. Keep the receipt, rate the trip, and you're on your way."
+      }
+    ],
+    "cta": "Book your first ride"
+  },
+  "drivePage": {
+    "title": "Turn your car into income",
+    "subtitle": "Drive with RideShare LLC across Montreal and the surrounding regions.",
+    "requirements": {
+      "title": "What you need",
+      "items": [
+        "You're 21 or older",
+        "A valid Quebec driver's licence (Class 5 or higher)",
+        "A 2015 or newer vehicle, in good winter shape",
+        "A clean driving record and background check",
+        "Queens's or Quebec vehicle insurance"
+      ]
+    },
+    "earningsBox": {
+      "title": "What you can earn",
+      "text": "Drivers keep 78% of every fare. A typical evening shift of six downtown rides earns:",
+      "example": "$174",
+      "exampleNote": "before gas and expenses, based on average October trips",
+      "weekly": "and weekly direct deposits, every Monday"
+    },
+    "cta": "Apply to drive",
+    "steps": [
+      {
+        "title": "Apply",
+        "text": "Send your details and car information — it takes two minutes."
+      },
+      {
+        "title": "Get approved",
+        "text": "We check your licence, record, and vehicle. Most drivers are approved within 48 hours."
+      },
+      {
+        "title": "Start earning",
+        "text": "Go online whenever you want, from wherever you are on the island."
+      }
+    ]
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This page doesn't exist — maybe the bus took a wrong turn.",
+    "cta": "Back to home"
+  }
+}

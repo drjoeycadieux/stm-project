@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f8fb;
+  --foreground: #0b1220;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme {
+  /* RideShare LLC palette: deep Montreal night + highway-lane green */
+  --color-ink-950: #0b1220;
+  --color-ink-900: #131f36;
+  --color-ink-800: #1d2c49;
+  --color-ink-700: #2d3f61;
+  --color-ink-500: #5b6b87;
+  --color-ink-400: #8492aa;
+  --color-ink-300: #aab5c9;
+  --color-ink-200: #d3dae6;
+  --color-ink-100: #e6ebf3;
+  --color-ink-50: #f3f6fa;
+
+  --color-brand-900: #053b2c;
+  --color-brand-800: #065f46;
+  --color-brand-700: #047857;
+  --color-brand-600: #059669;
+  --color-brand-500: #10b981;
+  --color-brand-400: #34d399;
+  --color-brand-200: #a7f3d0;
+  --color-brand-100: #d1fae5;
+  --color-brand-50: #ecfdf5;
+
+  --color-ice-100: #e8f0fb;
+  --color-ice-50: #f2f7fd;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-ink-950);
+}
+
+/* Staggered entrance for hero elements */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Car marker travelling along the trip route on the map */
+@keyframes travel {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.car-marker {
+  offset-path: var(--route-path);
+  offset-rotate: auto;
+  animation: travel var(--travel-duration, 45s) linear both;
+  animation-delay: var(--travel-delay, 0s);
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}

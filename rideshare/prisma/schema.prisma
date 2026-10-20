@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  phone        String?
+  passwordHash String
+  locale       String   @default("en")
+  createdAt    DateTime @default(now())
+
+  driver Driver?
+  rides  Ride[]  @relation("RiderRides")
+}
+
+model Driver {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  carModel  String
+  plate     String
+  color     String
+  rating    Float    @default(4.9)
+  online    Boolean  @default(false)
+  lat       Float    @default(45.5017)
+  lng       Float    @default(-73.5673)
+  createdAt DateTime @default(now())
+
+  rides Ride[] @relation("DriverRides")
+}
+
+model Ride {
+  id        String   @id @default(cuid())
+  riderId   String
+  rider     User     @relation("RiderRides", fields: [riderId], references: [id], onDelete: Cascade)
+  driverId  String?
+  driver    Driver?  @relation("DriverRides", fields: [driverId], references: [id], onDelete: SetNull)
+
+  // requested -> matched -> in_progress -> completed
+  // requested|matched -> cancelled
+  status String @default("requested")
+  tier   String // economy | premium | xl
+
+  pickupId    String
+  pickupName  String
+  pickupLat   Float
+  pickupLng   Float
+  dropoffId   String
+  dropoffName String
+  dropoffLat  Float
+  dropoffLng  Float
+
+  distanceKm   Float
+  durationMin  Float
+  baseFare     Float
+  distanceFare Float
+  timeFare     Float
+  airportFee   Float  @default(0)
+  surge        Float  @default(1)
+  subtotal     Float
+  taxes        Float
+  fare         Float
+  driverPayout Float  @default(0)
+  paymentRef   String
+
+  rating Int?
+  note   String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  matchedAt   DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  @@index([riderId, status])
+  @@index([driverId, status])
+  @@index([status])
+}
