@@ -5,7 +5,6 @@ import { config } from './config.js';
  * Returns planned and active disruptions affecting routes and stops.
  */
 const ENDPOINT = '/i3/v2/messages/etatservice';
-const CACHE_TTL_MS = 60_000;
 const MAX_ALERTS = 450;
 
 let cache = null;
@@ -129,7 +128,7 @@ export async function getAlerts() {
   inflight = loadAlerts()
     .then((fresh) => {
       cache = fresh;
-      expiresAt = Date.now() + CACHE_TTL_MS;
+      expiresAt = Date.now() + config.alertsTtlMs;
       return fresh;
     })
     .catch((error) => {

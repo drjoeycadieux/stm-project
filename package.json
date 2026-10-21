@@ -9,9 +9,14 @@
     "dev:server": "node --watch server/index.js",
     "dev:web": "vite",
     "build": "tsc -b && vite build",
+    "build:gtfs": "node scripts/build-gtfs.mjs",
+    "build:vercel": "npm run build:gtfs && npm run build",
     "start": "node server/index.js",
     "preview": "vite preview",
     "typecheck": "tsc -b"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",

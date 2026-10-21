@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { createWriteStream } from 'node:fs';
+import { createWriteStream, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import AdmZip from 'adm-zip';
 import { parse } from 'csv-parse/sync';
@@ -8,9 +8,13 @@ import { config } from './config.js';
 /**
  * Static GTFS loader.
  *
- * Downloads the STM GTFS archive once (then weekly), extracts only the files the
- * dashboard needs and keeps a compact in-memory index:
- *   routes, stops, trips and shapes.
+ * Two data sources are supported:
+ *
+ *  - Production (Vercel): `npm run build:gtfs` writes compact JSON files to
+ *    ./gtfs-data, which are bundled with the API function. They are read from
+ *    disk on the first invocation, so no 67 MB download is needed per instance.
+ *  - Local development: when ./gtfs-data is absent, the archive is downloaded
+ *    once, cached on disk and parsed in memory (then refreshed weekly).
  *
  * stop_times.txt is intentionally ignored: it is ~326 MB in the STM feed and the
  * live GTFS-Realtime trip updates already provide the upcoming schedule.
@@ -25,10 +29,13 @@ const state = {
   routeList: [],
   stops: new Map(),
   stopList: [],
+  // tripId -> [routeId, headsign, directionId, shapeId]
   trips: new Map(),
   shapes: new Map(),
   routeShapeIndex: new Map(),
 };
+
+let shapesLoaded = false;
 
 export function normalizeText(value) {
   return String(value ?? '')
@@ -85,6 +92,92 @@ function readCsv(zip, name) {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Prebuilt data (./gtfs-data, generated at deploy time)
+// ---------------------------------------------------------------------------
+
+function addStop(stop, search) {
+  state.stops.set(stop.id, stop);
+  state.stopList.push({ ...stop, search });
+}
+
+function loadPrebuilt() {
+  const networkFile = path.join(config.dataDir, 'network.json');
+  if (!existsSync(networkFile)) return false;
+
+  const data = JSON.parse(readFileSync(networkFile, 'utf8'));
+
+  for (const route of data.routes) state.routes.set(route.id, route);
+  state.routeList = [...state.routes.values()];
+
+  for (const row of data.stops) {
+    addStop(
+      {
+        id: row[0],
+        code: row[1],
+        name: row[2],
+        lat: row[3],
+        lon: row[4],
+        accessible: row[5] === 1,
+        isStation: row[6] === 1,
+        parent: row[7],
+      },
+      row[8],
+    );
+  }
+
+  for (const row of data.trips) {
+    const [tripId, routeId, headsign, directionId, shapeId] = row;
+    state.trips.set(tripId, [routeId, headsign || '', directionId, shapeId]);
+    if (routeId && shapeId) {
+      const key = `${routeId}:${directionId}`;
+      if (!state.routeShapeIndex.has(key)) state.routeShapeIndex.set(key, shapeId);
+    }
+  }
+
+  state.feedVersion = data.feedVersion || null;
+  state.updatedAt = data.generatedAt || null;
+  state.ready = true;
+
+  console.log(
+    `[gtfs] loaded prebuilt data — ${state.routes.size} routes, ${state.stops.size} stops, ` +
+      `${state.trips.size} trips (feed ${state.feedVersion || 'unknown'})`,
+  );
+  return true;
+}
+
+function loadPrebuiltShapes() {
+  if (shapesLoaded) return;
+  shapesLoaded = true;
+
+  const shapesFile = path.join(config.dataDir, 'shapes.json');
+  if (!existsSync(shapesFile)) return;
+
+  const startedAt = Date.now();
+  const raw = JSON.parse(readFileSync(shapesFile, 'utf8'));
+  for (const [shapeId, flat] of Object.entries(raw)) {
+    const points = [];
+    for (let i = 0; i + 1 < flat.length; i += 2) points.push([flat[i], flat[i + 1]]);
+    state.shapes.set(shapeId, points);
+  }
+  console.log(
+    `[gtfs] loaded ${state.shapes.size} shapes in ${Date.now() - startedAt} ms`,
+  );
+}
+
+const hasPrebuiltData = (() => {
+  try {
+    return loadPrebuilt();
+  } catch (error) {
+    console.error(`[gtfs] failed to read prebuilt data: ${error.message}`);
+    return false;
+  }
+})();
+
+// ---------------------------------------------------------------------------
+// Runtime archive download (local development fallback)
+// ---------------------------------------------------------------------------
+
 async function downloadGtfs(target) {
   await fs.mkdir(config.cacheDir, { recursive: true });
   const tmp = `${target}.tmp`;
@@ -130,6 +223,7 @@ async function downloadGtfs(target) {
 }
 
 async function ensureArchive() {
+  await fs.mkdir(config.cacheDir, { recursive: true });
   const archive = path.join(config.cacheDir, 'gtfs_stm.zip');
   let stat = await fs.stat(archive).catch(() => null);
   const fresh = stat && Date.now() - stat.mtimeMs < config.gtfsMaxAgeMs;
@@ -183,24 +277,25 @@ function loadArchive(archive) {
   // Trips ------------------------------------------------------------------
   for (const row of readCsv(zip, 'trips.txt')) {
     if (!row.trip_id) continue;
-    const trip = {
-      id: row.trip_id,
-      routeId: row.route_id || null,
-      serviceId: row.service_id || null,
-      headsign: (row.trip_headsign || '').trim(),
-      directionId: Number(row.direction_id) || 0,
-      shapeId: row.shape_id || null,
-      accessible: row.wheelchair_accessible === '1',
-    };
-    state.trips.set(trip.id, trip);
+    const routeId = row.route_id || null;
+    const directionId = Number(row.direction_id) || 0;
+    const shapeId = row.shape_id || null;
 
-    if (trip.shapeId && trip.routeId) {
-      const key = `${trip.routeId}:${trip.directionId}`;
-      if (!state.routeShapeIndex.has(key)) state.routeShapeIndex.set(key, trip.shapeId);
+    state.trips.set(row.trip_id, [
+      routeId,
+      (row.trip_headsign || '').trim(),
+      directionId,
+      shapeId,
+    ]);
+
+    if (routeId && shapeId) {
+      const key = `${routeId}:${directionId}`;
+      if (!state.routeShapeIndex.has(key)) state.routeShapeIndex.set(key, shapeId);
     }
   }
 
   // Stops ------------------------------------------------------------------
+  state.stopList = [];
   for (const row of readCsv(zip, 'stops.txt')) {
     if (!row.stop_id) continue;
     const stop = {
@@ -214,12 +309,8 @@ function loadArchive(archive) {
       parent: row.parent_station || null,
     };
     if (!Number.isFinite(stop.lat) || !Number.isFinite(stop.lon)) continue;
-    state.stops.set(stop.id, stop);
+    addStop(stop, normalizeText(`${stop.name} ${stop.code}`));
   }
-  state.stopList = [...state.stops.values()].map((stop) => ({
-    ...stop,
-    search: normalizeText(`${stop.name} ${stop.code}`),
-  }));
 
   // Shapes -----------------------------------------------------------------
   const grouped = new Map();
@@ -250,6 +341,7 @@ function loadArchive(archive) {
       ]),
     );
   }
+  shapesLoaded = true;
 
   state.feedVersion = feedInfo.feed_version || null;
   state.updatedAt = Date.now();
@@ -261,6 +353,7 @@ function loadArchive(archive) {
 }
 
 export async function initGtfs() {
+  if (hasPrebuiltData || state.ready) return;
   if (state.loading) return;
   state.loading = true;
   state.error = null;
@@ -284,6 +377,7 @@ export function getStatus() {
     error: state.error,
     updatedAt: state.updatedAt,
     feedVersion: state.feedVersion,
+    source: hasPrebuiltData ? 'prebuilt' : 'archive',
     counts: {
       routes: state.routes.size,
       stops: state.stops.size,
@@ -308,7 +402,10 @@ export function getStop(stopId) {
 }
 
 export function getTrip(tripId) {
-  return state.trips.get(tripId) || null;
+  const trip = state.trips.get(tripId);
+  if (!trip) return null;
+  const [routeId, headsign, directionId, shapeId] = trip;
+  return { id: tripId, routeId, headsign, directionId, shapeId };
 }
 
 export function publicStop(stop) {
@@ -367,11 +464,14 @@ export function getRouteShape(routeId, directionId = 0) {
     state.routeShapeIndex.get(`${routeId}:${directionId}`) ??
     state.routeShapeIndex.get(`${routeId}:0`) ??
     null;
-  return shapeId ? state.shapes.get(shapeId) || null : null;
+  if (!shapeId) return null;
+  loadPrebuiltShapes();
+  return state.shapes.get(shapeId) || null;
 }
 
 export function getTripShape(tripId) {
-  const trip = state.trips.get(tripId);
+  const trip = getTrip(tripId);
   if (!trip?.shapeId) return null;
+  loadPrebuiltShapes();
   return state.shapes.get(trip.shapeId) || null;
 }
