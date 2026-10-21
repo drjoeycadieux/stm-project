@@ -1,0 +1,41 @@
+{
+  "name": "stm-live-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Live STM Montreal bus tracking and schedule dashboard",
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c magenta,cyan \"npm:dev:server\" \"npm:dev:web\"",
+    "dev:server": "node --watch server/index.js",
+    "dev:web": "vite",
+    "build": "tsc -b && vite build",
+    "start": "node server/index.js",
+    "preview": "vite preview",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "adm-zip": "^0.6.1",
+    "csv-parse": "^7.0.3",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "gtfs-realtime-bindings": "^2.2.0",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
+    "@types/express": "^5.0.6",
+    "@types/leaflet": "^1.9.22",
+    "@types/leaflet.markercluster": "^1.5.6",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.6",
+    "playwright-core": "^1.64.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}

@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+dist-ssr/
+*.local
+
+# environment / secrets
+.env
+.env.*
+!.env.example
+
+# runtime cache (GTFS zip is ~67 MB, downloaded on first run)
+server/.cache/
+
+# logs
+*.log
+npm-debug.log*
